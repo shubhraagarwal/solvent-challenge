@@ -1,6 +1,5 @@
 import { WalletNotConnectedError } from "@solana/wallet-adapter-base";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { Keypair, SystemProgram, Transaction } from "@solana/web3.js";
 import React, { FC, useCallback } from "react";
 import * as web3 from "@solana/web3.js";
 import { Metadata } from "@metaplex-foundation/mpl-token-metadata";
@@ -9,7 +8,7 @@ import Card from "./Card";
 
 export const SendOneLamportToRandomAddress: FC = () => {
   const { connection } = useConnection();
-  const { publicKey, sendTransaction } = useWallet();
+  const { publicKey } = useWallet();
   const [balance, setBalance] = React.useState<number>(0);
   const [imageMetadata, setImageMetadata] = React.useState<any | null>();
   const [metadata, setMetadata] = React.useState<any | null>();
@@ -56,20 +55,18 @@ export const SendOneLamportToRandomAddress: FC = () => {
         Get NFTs
       </button>
       {balance !== 0 ? <p>Balance: {balance}</p> : null}
-      {imageMetadata ? (
-        imageMetadata.map((image: any) => {
-          i = i + 1;
-          return (
-            <Card
-              image={image.image}
-              metadata={metadata[i]}
-              imageMetadata={image}
-            />
-          );
-        })
-      ) : (
-        <p>lol</p>
-      )}
+      {imageMetadata
+        ? imageMetadata.map((image: any) => {
+            i = i + 1;
+            return (
+              <Card
+                image={image.image}
+                metadata={metadata[i]}
+                imageMetadata={image}
+              />
+            );
+          })
+        : null}
       {/* <img src={imageMetadata[1]} alt="adfd" /> */}
     </div>
   );
