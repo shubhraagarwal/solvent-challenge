@@ -29,24 +29,16 @@ export const SendOneLamportToRandomAddress: FC = () => {
     const images = (
       await Promise.all(ownedMetadata.map(({ data }) => axios.get(data.uri)))
     ).map(({ data }) => data);
-    let uniqueImages: any = [];
-    images.forEach((c: any) => {
-      if (uniqueImages.length === 0) {
-        uniqueImages.push(c);
-      } else {
-        for (let i = 0; i < uniqueImages.length; i++) {
-          console.log(c.symbol, uniqueImages[i].symbol);
-          if (c.symbol !== uniqueImages[i]?.symbol) {
-            uniqueImages.push(c);
-          } else {
-            break;
-          }
-        }
-      }
-      console.log(uniqueImages);
-    });
-    console.log(uniqueImages);
-    setImageMetadata(images);
+    // Get the values of the attributes.
+    const imageObjectValues = Object.values(images);
+
+    // Filter out all the duplicate symbol images in the `images` array.
+    const uniqueImages = imageObjectValues.filter(
+      (image, index, self) =>
+        index === self.findIndex((t) => t.symbol === image.symbol)
+    );
+
+    setImageMetadata(uniqueImages);
   }, [publicKey, connection]);
   let i = -1;
   return (
